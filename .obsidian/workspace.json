@@ -1,0 +1,225 @@
+{
+  "main": {
+    "id": "8b014aac053a0635",
+    "type": "split",
+    "children": [
+      {
+        "id": "f0243e592b40080c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e4d637eab5178353",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Summary.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "c072d0f9ec9a5d4e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Process points.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "183f894e164965c1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "MikroORM.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "683ef91cdcff56f9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Test.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "4e42368481d80f4b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Mantine.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d24fdf2a39b6778d",
+    "type": "split",
+    "children": [
+      {
+        "id": "98418ad3b3711818",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b4319c9bddcaab2b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "b9dab9e99cb0f44d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "75e209d25e5bdff7",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 239.5
+  },
+  "right": {
+    "id": "2cae8add421bae59",
+    "type": "split",
+    "children": [
+      {
+        "id": "4eac52490a5d9546",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eeacbc2b48f9b65e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "MikroORM.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "0d96b7cc7994a14d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "MikroORM.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "607a6a8af0103510",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "62a159759311b205",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "MikroORM.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "obsidian-focus-mode:Toggle Focus Mode (Shift + Click to show active pane only)": false
+    }
+  },
+  "active": "183f894e164965c1",
+  "lastOpenFiles": [
+    "Git.md",
+    "Test.md",
+    "Process points.md",
+    "MikroORM.md",
+    "Mantine.md",
+    "Question.md",
+    "RTK query.md",
+    "Summary.md",
+    "NextJS.md",
+    "BLC/BLC - Bored LandLord.md",
+    "[.md",
+    "BLC/BLC.canvas",
+    "Personal/Todo.md",
+    "Sazim Backend/Code Decoupling.md",
+    "BLC/Learning/AWS.md",
+    "Personal/Accounts.md",
+    "BLC/Learning",
+    "Untitled",
+    "Personal",
+    "BLC",
+    "Sazim Backend",
+    "docker-compose.yml",
+    "Welcome.md"
+  ]
+}

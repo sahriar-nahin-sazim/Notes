@@ -1,0 +1,5 @@
+- [ ] Apple ID
+- [ ] Github
+- [ ] Trello
+- [ ] Discord
+- [ ] Docker
