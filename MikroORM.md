@@ -260,6 +260,15 @@
 - go through all managed entities
 - compute appropriate change sets
 - perform according database queries
+- Modes (check ways to setup [here](https://mikro-orm.io/docs/unit-of-work#flush-modes))
+	- - `FlushMode.COMMIT` -  delays the flush until the current Transaction is committed.
+	- `FlushMode.AUTO` - (default) flushes only if necessary.
+			- If I have persisted change in `MyEntity` (eg new entry), query (at same Enitity) will auto flush
+	- `FlushMode.ALWAYS` - flush before every query.
+- [ ] [update could happen without loading ](https://mikro-orm.io/docs/entity-manager#updating-references-not-loaded-entities)(via unit of work)
+###### `em.fork()` 
+- create clean entity manager (separate context) and identity map
+- Usually provides request specific entity manager
 ###### Remove
 ```ts
 	const book1 = em.getReference(Book, 1);
@@ -268,9 +277,14 @@
 
 	// em.nativeDelete(); => fire simple delete query
 ```
-###### Entity Manager
+###### Entity ManagerYYY
 - `await em.findOne(EntityName, id);`
+	- return `null` if not found
+	- `em.findOneOrFail()` throws an error
 - `await em.find(EntityName, {});` same as `findAll`
+- `await em.upsert(Author, { email: 'foo@bar.com', age: 33 });`
+-  `em.refresh(entity)` - sync changes with database (local changes lost)
+	- equivalent to `findOne` with `refresh: true` and disabled auto-flush
 ```ts
 	const books = await em.findAll(Book, {
 	  where: { publisher: { $ne: null } },
@@ -281,7 +295,17 @@
 	const authors = await  
 			em.createQueryBuilder(Author).select('*').getResult();  
 	await em.populate(authors, { populate: ['books.tags'] });
-	
+
+// fail handler
+	try {
+	  const author = await em.findOneOrFail(Author, { name: 'does-not-exist' }, {
+	    failHandler: (entityName: string, where: Record<string, any> | IPrimaryKey) => new Error(`Failed: ${entityName} in ${util.inspect(where)}`)
+	  });
+	} catch (e) {
+	  console.error(e); // our custom error
+	}
+
+
 ```
 - condition/where object
 ```ts
@@ -349,7 +373,7 @@
 	author.books[0].tags.isInitialized(); // true
 	author.books[0].tags[0].isInitialized(); // true
 ```
-
+- [ ] `upsert`
 ###### Entity Reference
 - `Mikro` represent all entity as object (basically class instance)
 - Doesn't have to be fully loaded
@@ -368,8 +392,10 @@
 ```
 ###### Entity State
 - `MikroORM.init()` does entity discovery
-		-  patch entity prototype
-		- generate lazy getter for `WrappedEntity` (holds various metadata and state information about the entity) to allow type safe access.
+	-  patch entity prototype
+	- generate lazy getter for `WrappedEntity` (holds various metadata and state information about the entity) to allow type safe access.
+	- defaults `updateNestedEntities`, `updateByPrimaryKey`,   `!mergeObjectProperties`,  
+`mergeEmbeddedProperties`
 ```ts
 	import { wrap } from '@mikro-orm/core';
 	
@@ -403,18 +429,186 @@
 					   ); // count is total count
 
 // pagination- cursor based
+	/* cursor object
+	 Cursor<User> {  
+			items: [  
+			User { ... },  
+			User { ... },  
+			User { ... },  
+			...  
+			],  
+			totalCount: 50,  
+			length: 10,  
+			startCursor: 'WzRd',  
+			endCursor: 'WzZd',  
+			hasPrevPage: true,  
+			hasNextPage: true,  
+	 } */
 	const currentCursor = await em.findByCursor(User, {}, {  
 		first: 10,
 		// supported: before, first,(forward pagination) 
 		// after(cursor), last(number) (backward)
 		// unsupported: limit, offset
 		after: previousCursor, // cursor instance
-		// use currentCursor
+		// after: currentCursor.endCursor, // opaque string
+		// after: { id: lastSeenId }, // entity-like POJO
 		orderBy: { id: 'desc' },  // required
 	});
+	
 // 
 ```
+- [ ] custom SQL
+```ts
+	const users = await em.find(User, {
+			[sql`lower(email)`]: 'foo@bar.baz' 
+		}, {
+		  orderBy: { 
+			  [sql`(point(loc_latitude, loc_longitude) <@> point(0, 0))`]: 'ASC' 
+		},
+	});
+	// query
+	/*
+	select `e0`.*
+	from `user` as `e0`
+	where lower(email) = 'foo@bar.baz'
+	order by (point(loc_latitude, loc_longitude) <@> point(0, 0)) asc
+	*/
+```
+- [ ] atomic updates via raw helper
+- [ ] batch `insert`, `update`, `delete`
+- `disableIdentityMap` (impacts performance)
+	- creates new context (so `em.flush` has no effect)
+	- load entities inside that (and clear afterwards)
+- Custom ordering
+```ts
+	enum Priority {
+	  Low = 'low',
+	  Medium = 'medium',
+	  High = 'high',
+	}
+	
+	@Entity()
+	class Task {
+	  @PrimaryKey()
+	  id!: number
+	
+	  @Property()
+	  label!: string
+	
+	  @Enum({
+	    items: () => Priority,
+	    customOrder: [Priority.Low, Priority.Medium, Priority.High]
+	  })
+	  priority!: Priority
+	}
+```
+
+### [Entity Helper](https://mikro-orm.io/docs/entity-helper)
+- `assign()` 
+	- does not merge recursively (like `Object.assign`)
+```ts
+	import { wrap } from '@mikro-orm/core';
+	// const jon = new Author('Jon Snow', 'snow@wall.st');
+	// const book = new Book('Book', jon);
+	// book.author = em.getReference(Author, '...id...');
+	wrap(book).assign(
+		{
+		  title: 'Better Book 1',
+		  author: '...id...',
+		},
+		// { 
+		//	em  // for not managed entities
+		//	mergeObjectProperties: true  -- if false, replace object
+	//- for object { bar: { foo: 3 } } - only update `bar.foo`, 
+		// }
+	);
+
+// nested update
+	const book = await em.findOneOrFail(Book, 1, {
+			 populate: ['author'] 
+			 // MUST populate, or new entry is created
+		 });
+	
+	// update existing book's author's name
+	wrap(book).assign({
+	  author: {
+	    id: book.author.id,
+	    name: 'New name...',
+	  },
+	}, 
+	{ updateByPrimaryKey: false } 
+	// dont have to provide PK
+	// without this new entity will be created
+	);
+	// addresses: [new Address(...)] -> reset collection
+	// addresses: new Address(...) -> add to collection
+```
+- [ ] `mergeEmbeddedProperties`
+- [ ] [IWrappedEntity](https://mikro-orm.io/docs/entity-helper#wrappedentity-and-wrap-helper)
+	- Provided by `wrap` method or `BaseEntity` class
+			- `warp` method returns `WrappedEntity` with public methods
+			-  for internal properties `wrap(entity, true)`
+### [Unit of Work](https://mikro-orm.io/docs/unit-of-work)
+- Uses `Identity Map` pattern
+	- improve performance by providing a context-specific, in-memory cache
+	- prevents duplicate retrieval of the same object data from the database (a reference of object is kept inside `UnitOfWork`)
+	- indexed by primary key (takes the performance advantage)
+		- for other properties, returns same reference with database call
+				- fetches the object from database
+				- check if that object already exists
+	- we don't have to call `em.persist()` for managed objects thanks to Identity Map
+		- new entities are added after `em.persist`
+			- POTENTIAL PROBLEM - `findOne` could return the unmanaged entity after persist
+			- without PK in entity object that is auto flushed
+- Data Mapper
+	- Tries to achieve persistence-ignorance (JS object does not know relational database things)
+	- Keeps a second map (inside `UnitofWork`) for all fetched objects
+		- `em.flush()` call iterate through all entities and update the changed ones
+### [Identity Map](https://mikro-orm.io/docs/identity-map)
+- Improves performance for a query/request (doesn't help across request => different from cache)
+- Helps reduce memory footprint
+	- eg: Even keeps populated entries for findOne
+- `em.clear` to clear identity map cache
+###### [Request Context](https://mikro-orm.io/docs/identity-map#request-context)
+- Helps with Dependency Injection (what NestJS does) - as it always provides same instance 
+- TODO- check for other details
+### [Collections](https://mikro-orm.io/docs/collections)
+- Use `for of`to iterate, `getItems()` to access
+	- `toArray()` to readonly serialize
+- Array access for only read (doesn't check initialization, could throw error)
+- [ ]  A lot of methods
+- [ ] `Collection.Remove()` does not remove from database by default
+```ts
+// One to Many
+	@OneToMany(() => Book, book => book.author)  
+	// @OneToMany({ entity: () => Book, mappedBy: 'author' })  
+	books2 = new Collection<Book>(this);
+// Many to Many
+	// Unidirectional
+		@ManyToMany(() => Book)  
+		@ManyToMany({ entity: () => Book, owner: true })  
+		books2 = new Collection<Book>(this);
+	// Bidirectional
+		@ManyToMany(() => BookTag, tag => tag.books, { owner: true })  
+		// @ManyToMany({ entity: () => BookTag, inversedBy: 'books' })  
+		tags = new Collection<BookTag>(this);
+		// -- inverse side
+		@ManyToMany(() => Book, book => book.tags)
+		// @ManyToMany({ entity: () => Book, mappedBy: 'tags' })
+		books = new Collection<Book>(this);
+			
+```
+- [ ] [Pivot table entity](https://mikro-orm.io/docs/collections#custom-pivot-table-entity)
+
+### [Query Conditions](https://mikro-orm.io/docs/query-conditions)
+
+
 ## Questions
 - [ ] what is Reference/wrapper
 - [ ] `[HiddenProps]?: 'firstName' | 'lastName';` what this does?
-- [ ]  
+- [ ]  tf is opaque string
+- [ ] tf is pivot entity
+
+
+
+- [ ]  how are we handling request context 

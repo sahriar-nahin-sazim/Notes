@@ -8,30 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "e4d637eab5178353",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Summary.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "c072d0f9ec9a5d4e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Process points.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "183f894e164965c1",
             "type": "leaf",
             "state": {
@@ -44,24 +20,24 @@
             }
           },
           {
-            "id": "683ef91cdcff56f9",
+            "id": "0908a7ebff386dd2",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Test.md",
+                "file": "Summary.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "4e42368481d80f4b",
+            "id": "2d04ec275dc18730",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Mantine.md",
+                "file": "Tasks.md",
                 "mode": "source",
                 "source": false
               }
@@ -118,7 +94,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 239.5
+    "width": 239.5,
+    "collapsed": true
   },
   "right": {
     "id": "2cae8add421bae59",
@@ -134,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MikroORM.md",
+                "file": "Tasks.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "MikroORM.md",
+                "file": "Tasks.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "MikroORM.md"
+                "file": "Tasks.md"
               }
             }
           }
@@ -196,16 +173,17 @@
       "obsidian-focus-mode:Toggle Focus Mode (Shift + Click to show active pane only)": false
     }
   },
-  "active": "183f894e164965c1",
+  "active": "2d04ec275dc18730",
   "lastOpenFiles": [
-    "Git.md",
-    "Test.md",
+    "Summary.md",
     "Process points.md",
     "MikroORM.md",
-    "Mantine.md",
+    "Tasks.md",
     "Question.md",
     "RTK query.md",
-    "Summary.md",
+    "Test.md",
+    "Mantine.md",
+    "Git.md",
     "NextJS.md",
     "BLC/BLC - Bored LandLord.md",
     "[.md",

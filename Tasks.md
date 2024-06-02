@@ -1,0 +1,20 @@
+- Login
+- `Properties` @`/properties` > `New Property` 
+	- [ ] check all the input fields maybe
+	- property notes
+- Lease
+	- Select Property
+	- Add tenant
+		- Add roomate
+	- Document
+		- Lease Agreement*
+		- Renter Insurance*
+		- Additional Document
+- Contract (Added to lease)
+	- start date
+	- end date
+	- load vales from property
+
+- Application (One application for one user)
+	- update property details
+	- Generate application link
