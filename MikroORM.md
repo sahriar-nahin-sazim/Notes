@@ -277,7 +277,7 @@
 
 	// em.nativeDelete(); => fire simple delete query
 ```
-###### Entity ManagerYYY
+###### Entity Manager
 - `await em.findOne(EntityName, id);`
 	- return `null` if not found
 	- `em.findOneOrFail()` throws an error

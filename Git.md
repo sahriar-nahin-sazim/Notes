@@ -1,6 +1,9 @@
 ### Sazim Resources
 
 
+so if we are aware of the form field names from pdf, this approach becomes really easy and less error-prone. 
+the alternative approach is to use an array.
+
 [source](https://youtube.com/playlist?list=PL9lx0DXCC4BNUby5H58y6s2TQVLadV8v7&si=vsdA18smsE9FS9ng) 
 - **Git objects** *(Like Data store/Table)*
 	- **Blob** - contents of file (files - metadata)
@@ -239,10 +242,6 @@ wget --mirror --convert-links --wait=2 url
 
 
 ## basics
-`git init` 
-- make it a git repository (.git folder)
-
-
 `git init` 
 - make it a git repository (.git folder)
 
